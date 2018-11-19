@@ -13,8 +13,20 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        getRecipes()
+        
     }
-
+    
+    func getRecipes() {
+        NetworkManager.getRecipes { recipeArray in
+            print(recipeArray)
+            //self.recipes = recipeArray
+            // DispatchQueue.main.async {
+            
+            
+        }
+    }
 
 }
 
