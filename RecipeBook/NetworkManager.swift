@@ -17,7 +17,7 @@ class NetworkManager {
             switch response.result {
             case .success(let data):
                 if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
-                    //print(json)
+                    print(json)
                 }
                 let jsonDecoder = JSONDecoder()
                 if let recipeResponse = try? jsonDecoder.decode(RecipeDataResponse.self, from: data) {
