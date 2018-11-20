@@ -10,10 +10,11 @@ import Foundation
 import Alamofire
 
 class NetworkManager {
-    /// Endpoint URL string
-    private static let endpoint = "http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet"
-    static func getRecipes(completion: @escaping ([Recipe]) -> Void) {
-        Alamofire.request(endpoint, method: .get).validate().responseData { (response) in
+    
+    static func getRecipes(for searchQuery: String, completion: @escaping ([Recipe]) -> Void) {
+        let searchEndpoint = StringConstants.endpoinPrefix + searchQuery.lowercased()
+        print(searchEndpoint)
+        Alamofire.request(searchEndpoint, method: .get).validate().responseData { (response) in
             switch response.result {
             case .success(let data):
                 if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
@@ -24,11 +25,16 @@ class NetworkManager {
                     //print(recipeResponse.results)
                     completion(recipeResponse.results)
                 } else {
-                    print("Invalid Response Data")
+                    print(StringConstants.invalidResponse)
                 }
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    private struct StringConstants {
+        static let endpoinPrefix = "http://www.recipepuppy.com/api/?q="
+        static let invalidResponse = "Invalid Response Data"
     }
 }

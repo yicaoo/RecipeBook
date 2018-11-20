@@ -47,12 +47,12 @@ class RecipeTableViewCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(StringConstants.initError)
     }
     
     func configure(for recipe: Recipe) {
         nameLabel.text = recipe.title
-        ingredientsLabel.text = StringLabelConstants.ingredientLabel + recipe.ingredients
+        ingredientsLabel.text = StringConstants.ingredientLabel + recipe.ingredients
     }
     
     private struct UIConstants {
@@ -64,7 +64,8 @@ class RecipeTableViewCell: UITableViewCell {
         static let ingredientsLabelHeight: CGFloat = 14
     }
     
-    private struct StringLabelConstants {
+    private struct StringConstants {
         static let ingredientLabel = "Ingredients: "
+        static let initError = "init(coder:) has not been implemented"
     }
 }

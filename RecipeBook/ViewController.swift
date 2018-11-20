@@ -17,26 +17,27 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = .white
+        navigationItem.title = UIConstants.searchPageTitle
         setupSearchBar()
         setupTableView()
         setupConstraints()
-        getRecipes()
+        //getRecipes()
     }
     
-    private func getRecipes() {
-        NetworkManager.getRecipes { recipeArray in
-            //print(recipeArray)
+    private func getRecipes(for searchQuery: String) {
+        NetworkManager.getRecipes(for: searchQuery, completion: { (recipeArray) in
             self.recipeArray = recipeArray
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
-        }
+        }) 
     }
     
+    // MARK: - Layout
     private func setupSearchBar() {
         searchBar = UISearchBar()
         searchBar.delegate = self
-        searchBar.placeholder = "Search"
+        searchBar.placeholder = UIConstants.search
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchBar)
     }
@@ -47,7 +48,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: UIConstants.tableReuseIdentifier)
-        //tableView.tableFooterView = UIView() // so there's no empty lines at the bottom
+        tableView.tableFooterView = UIView() // so there's no empty lines at the bottom
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
     }
@@ -67,6 +68,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
          ])
     }
     
+    // MARK: - TableView Functionality
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipeArray.count
     }
@@ -81,8 +83,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return UITableView.automaticDimension
     }
     
+    // MARK: - Searchbar Functionality
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if !searchText.isEmpty {
+            getRecipes(for: searchText)
+        } else {
+            recipeArray.removeAll()
+            tableView.reloadData()
+        }
+    }
+    
+    // MARK: - Constants
     private struct UIConstants {
         static let tableReuseIdentifier = "RecipeTableViewCell"
+        static let search = "Search"
+        static let searchPageTitle = "Recipes"
     }
 }
 
