@@ -12,6 +12,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var searchBar: UISearchBar!
     var tableView: UITableView!
+    var backgroundView: UIImageView!
     var recipeArray = [Recipe]()
     // for a given table view, store already downloaded images
     var cachedImages: [Int:UIImage] = [:]
@@ -23,6 +24,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         navigationItem.title = UIConstants.searchPageTitle
         setupSearchBar()
         setupTableView()
+        setupBackgroundImage()
         setupConstraints()
     }
     
@@ -74,13 +76,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         view.addSubview(tableView)
     }
     
+    private func setupBackgroundImage() {
+        backgroundView = UIImageView()
+        backgroundView.image = UIImage(named: StringConstants.backgroundImage)
+        backgroundView.contentMode = .scaleAspectFill
+        tableView.backgroundView = backgroundView
+    }
+    
     func setupConstraints() {
+        // constraints for searchbar
          NSLayoutConstraint.activate([
          searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
          searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
          searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
          ])
         
+        // constraints for tableview
          NSLayoutConstraint.activate([
          tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
          tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -134,6 +145,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     private struct StringConstants {
         static let ingredientLabel = "Ingredients: "
         static let defaultPhoto = "NA"
+        static let backgroundImage = "background"
     }
 }
 
