@@ -12,7 +12,6 @@ class RecipeTableViewCell: UITableViewCell {
     var nameLabel: UILabel!
     var ingredientsLabel: UILabel!
     var recipeImageView: UIImageView!
-    var spinner: UIActivityIndicatorView!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,14 +35,10 @@ class RecipeTableViewCell: UITableViewCell {
         ingredientsLabel.lineBreakMode = .byWordWrapping
         ingredientsLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        spinner = UIActivityIndicatorView()
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(spinner)
         contentView.addSubview(nameLabel)
         contentView.addSubview(ingredientsLabel)
         contentView.addSubview(recipeImageView)
         setupConstraints()
-        spinner.frame = recipeImageView.frame
 
     }
     
@@ -64,7 +59,7 @@ class RecipeTableViewCell: UITableViewCell {
             recipeImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UIConstants.imagePadding),
             recipeImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             recipeImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            recipeImageView.widthAnchor.constraint(equalToConstant: 60)
+            recipeImageView.widthAnchor.constraint(equalToConstant: UIConstants.imageViewSize)
             ])
     }
     
@@ -79,6 +74,7 @@ class RecipeTableViewCell: UITableViewCell {
         static let labelVerticalSpacing: CGFloat = 5
         static let imagePadding: CGFloat = 5
         static let ingredientsLabelHeight: CGFloat = 14
+        static let imageViewSize: CGFloat = 60
     }
     
     private struct StringConstants {

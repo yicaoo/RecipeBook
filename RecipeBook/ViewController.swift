@@ -13,6 +13,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var searchBar: UISearchBar!
     var tableView: UITableView!
     var recipeArray = [Recipe]()
+    // for a given table view, store already downloaded images
+    var cachedImages: [Int:UIImage] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,21 +37,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     private func setImage(cell: RecipeTableViewCell, cellForRowAt indexPath: IndexPath, recipe: Recipe) {
-        if recipe.thumbnail.isEmpty {
-            cell.recipeImageView.image = UIImage(named: StringConstants.defaultPhoto)
-            tableView.reloadRows(at: [indexPath], with: .fade)
+        // if already downloaded, just load from array
+        if let image = cachedImages[indexPath.row] {
+            cell.recipeImageView.image = image
         } else {
-            cell.spinner.startAnimating()
-            NetworkManager.fetchImage(imageURL: recipe.thumbnail) { (image) in
-                // could be cached
-                DispatchQueue.main.async {
-                    cell.recipeImageView.image = image
-                    cell.spinner.stopAnimating()
-                    self.tableView.reloadData()
+            // otherwise, start new download
+            cell.recipeImageView.image = nil
+            if recipe.thumbnail.isEmpty {
+                cell.recipeImageView.image = UIImage(named: StringConstants.defaultPhoto)
+            } else {
+                NetworkManager.fetchImage(imageURL: recipe.thumbnail) { (image) in
+                    DispatchQueue.main.async {
+                        cell.recipeImageView.image = image
+                    }
                 }
             }
-        }
-        
+        } 
     }
     
     // MARK: - Layout
