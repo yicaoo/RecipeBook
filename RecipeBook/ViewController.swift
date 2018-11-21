@@ -66,7 +66,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     private func setupTableView() {
         tableView = UITableView()
-        tableView.allowsSelection = false
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(RecipeTableViewCell.self, forCellReuseIdentifier: UIConstants.tableReuseIdentifier)
@@ -110,8 +109,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //performSegue(withIdentifier: , sender: nil)
+        let webViewController = WebViewController()
+        webViewController.pageURL = recipeArray[indexPath.row].href
+    navigationController?.pushViewController(webViewController, animated: true)
     }
+    
     // MARK: - Searchbar Functionality
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchText.isEmpty {
