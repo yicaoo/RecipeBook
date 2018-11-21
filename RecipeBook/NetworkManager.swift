@@ -33,6 +33,21 @@ class NetworkManager {
         }
     }
     
+    static func fetchImage(imageURL: String, completion: @escaping (UIImage) -> Void) {
+        Alamofire.request(imageURL).validate().responseData { (response) in
+            switch response.result {
+            case .success(let data):
+                if let recipeImage = UIImage(data: data) {
+                    completion(recipeImage)
+                } else {
+                    print(StringConstants.invalidResponse)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     private struct StringConstants {
         static let endpoinPrefix = "http://www.recipepuppy.com/api/?q="
         static let invalidResponse = "Invalid Response Data"

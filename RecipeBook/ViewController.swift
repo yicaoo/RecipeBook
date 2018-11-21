@@ -9,6 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+    
     var searchBar: UISearchBar!
     var tableView: UITableView!
     var recipeArray = [Recipe]()
@@ -21,9 +22,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         setupSearchBar()
         setupTableView()
         setupConstraints()
-        //getRecipes()
     }
     
+    // MARK: -Networking requests
     private func getRecipes(for searchQuery: String) {
         NetworkManager.getRecipes(for: searchQuery, completion: { (recipeArray) in
             self.recipeArray = recipeArray
@@ -31,6 +32,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 self.tableView.reloadData()
             }
         }) 
+    }
+    
+    private func setImage(cell: RecipeTableViewCell, cellForRowAt indexPath: IndexPath, recipe: Recipe) {
+        if recipe.thumbnail.isEmpty {
+            cell.recipeImageView.image = UIImage(named: StringConstants.defaultPhoto)
+            tableView.reloadRows(at: [indexPath], with: .fade)
+        } else {
+            cell.spinner.startAnimating()
+            NetworkManager.fetchImage(imageURL: recipe.thumbnail) { (image) in
+                // could be cached
+                DispatchQueue.main.async {
+                    cell.recipeImageView.image = image
+                    cell.spinner.stopAnimating()
+                    self.tableView.reloadData()
+                }
+            }
+        }
+        
     }
     
     // MARK: - Layout
@@ -75,7 +94,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UIConstants.tableReuseIdentifier, for: indexPath) as! RecipeTableViewCell
-        cell.configure(for: recipeArray[indexPath.row])
+        let currRecipe = recipeArray[indexPath.row]
+        // set up contents of the cell
+        cell.nameLabel.text = currRecipe.title
+        cell.ingredientsLabel.text = StringConstants.ingredientLabel + currRecipe.ingredients
+        setImage(cell: cell, cellForRowAt: indexPath, recipe: currRecipe)
         return cell
     }
     
@@ -98,6 +121,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         static let tableReuseIdentifier = "RecipeTableViewCell"
         static let search = "Search"
         static let searchPageTitle = "Recipes"
+    }
+    
+    private struct StringConstants {
+        static let ingredientLabel = "Ingredients: "
+        static let defaultPhoto = "NA"
     }
 }
 
