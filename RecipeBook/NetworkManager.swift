@@ -13,7 +13,7 @@ class NetworkManager {
     
     static func getRecipes(for searchQuery: String, completion: @escaping ([Recipe]) -> Void) {
         let searchEndpoint = StringConstants.endpoinPrefix + searchQuery.lowercased()
-        print(searchEndpoint)
+        //print(searchEndpoint)
         Alamofire.request(searchEndpoint, method: .get).validate().responseData { (response) in
             switch response.result {
             case .success(let data):

@@ -15,6 +15,7 @@ class RecipeTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.accessoryType = .disclosureIndicator
         // init recipe image view
         recipeImageView = UIImageView()
         recipeImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -57,9 +58,9 @@ class RecipeTableViewCell: UITableViewCell {
             ])
         NSLayoutConstraint.activate([
             recipeImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UIConstants.imagePadding),
-            recipeImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            recipeImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            recipeImageView.widthAnchor.constraint(equalToConstant: UIConstants.imageViewSize)
+            recipeImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            recipeImageView.widthAnchor.constraint(equalToConstant: UIConstants.imageViewSize),
+            recipeImageView.heightAnchor.constraint(equalToConstant: UIConstants.imageViewSize)
             ])
     }
     

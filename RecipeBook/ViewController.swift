@@ -109,6 +109,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return UITableView.automaticDimension
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //performSegue(withIdentifier: , sender: nil)
+    }
     // MARK: - Searchbar Functionality
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchText.isEmpty {
